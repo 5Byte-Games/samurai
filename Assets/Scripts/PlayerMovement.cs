@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 // gets unity engine input and sets v2 and v3 to standard usage
@@ -53,6 +54,11 @@ public class PlayerMovement : MonoBehaviour
 
         // checks direction player is facing
         Flip();
+    }
+
+    public Rigidbody2D GetRigidbody()
+    {
+        return rb;
     }
 
     private void playerMovement()
