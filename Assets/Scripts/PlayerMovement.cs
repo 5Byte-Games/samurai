@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float playerJumpHeight = 8f;
     [SerializeField] private float playerSpeed = 10f;
     private bool isWallSliding;
+    public bool IsGrounded { get; set;}
     private float wallSlidingSPeed = 2f;
 
     private bool isFacingRight = true;
@@ -54,11 +55,6 @@ public class PlayerMovement : MonoBehaviour
 
         // checks direction player is facing
         Flip();
-    }
-
-    public Rigidbody2D GetRigidbody()
-    {
-        return rb;
     }
 
     private void playerMovement()
@@ -102,7 +98,14 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded()
     {
         // makes boxcast of current hitbox, shifts it down a small amount and looks for collision with jumpable ground
-        return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
+        if (Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround) == true)
+        {
+            IsGrounded = true;
+        } else
+        {
+            IsGrounded = false;
+        }
+        return IsGrounded;
     }
 
     private void Flip()

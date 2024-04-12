@@ -26,7 +26,7 @@ public class Ability : MonoBehaviour
 
     public override string ToString()
     {
-        return this.AbilityName; // Or any other property you want to display
+        return AbilityName; // Or any other property you want to display
     }
 
     public void AddAbilityToPlayer()

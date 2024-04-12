@@ -16,6 +16,7 @@ public class SkillList : MonoBehaviour
     private float lastDoubleJumpTime;
     private float doubleJumpCooldown = 1f;
     private Rigidbody2D rb;
+    private float dirX = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +31,9 @@ public class SkillList : MonoBehaviour
     {
         
         // List all the Abilities in the game With stats, through to another function. (START OF GAME)
-        AddAbilityToAbilityList(10, 5, false, true, 0, 5, "Double Jump", "Double-Jump.png");
+        AddAbilityToAbilityList(24, 0, false, true, 0, 5, "Double Jump", "Double-Jump.png");
 
-        AddAbilityToAbilityList(10, 5, false, true, 0, 5, "Dash", "Dash.png");
+        AddAbilityToAbilityList(0, 20, false, true, 0, 5, "Dash", "Dash.png");
 
         
     }
@@ -55,16 +56,36 @@ public class SkillList : MonoBehaviour
     public void UseAbility(Ability ability)
     {
         Debug.Log("Ability:" + ability);
-        rb.velocity = new Vector2(rb.velocity.x, ability.YVelocity);
-        // YVelocity += ability.YVelocity;
-        // XVelocity += ability.XVelocity;
+
+        if (ability.YVelocity > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, ability.YVelocity);
+        }
+        if (ability.XVelocity > 0)
+        {
+            Debug.Log("Dash Used");
+            // Move sideways, no idea how this works right now
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Player input check for ability usage
+        CheckAbilityUsage();
+
+
+    
+    }
+
+    public void CheckAbilityUsage()
+    {
+        if (GetComponent<PlayerMovement>().IsGrounded == true)
+        {
+            doubleJumpAvailable = true;
+        }
         // if space is pressed twice, use the double jump ability
-        if (Input.GetKeyDown(KeyCode.Space) && doubleJumpAvailable && playerAbilities.Count > 0)
+        if (Input.GetKeyDown(KeyCode.Space) && doubleJumpAvailable && playerAbilities.Count > 0 && GetComponent<PlayerMovement>().IsGrounded == false)
         {
             UseAbility(playerAbilities[0]);
             Debug.Log("Double Jump Used");
@@ -73,11 +94,9 @@ public class SkillList : MonoBehaviour
             doubleJumpAvailable = false;
             lastDoubleJumpTime = Time.time;
         }
-        
-        // Check if the double jump cooldown has elapsed
-        if (!doubleJumpAvailable && Time.time - lastDoubleJumpTime >= doubleJumpCooldown)
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            doubleJumpAvailable = true; // Double jump is available again
+            UseAbility(playerAbilities[1]);
         }
     }
 }
