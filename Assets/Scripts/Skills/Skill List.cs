@@ -33,7 +33,7 @@ public class SkillList : MonoBehaviour
         // List all the Abilities in the game With stats, through to another function. (START OF GAME)
         AddAbilityToAbilityList(24, 0, false, true, 0, 5, "Double Jump", "Double-Jump.png");
 
-        AddAbilityToAbilityList(0, 20, false, true, 0, 5, "Dash", "Dash.png");
+        AddAbilityToAbilityList(0, 30, false, true, 0, 5, "Dash", "Dash.png");
 
         
     }
@@ -57,14 +57,26 @@ public class SkillList : MonoBehaviour
     {
         Debug.Log("Ability:" + ability);
 
+
         if (ability.YVelocity > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, ability.YVelocity);
         }
         if (ability.XVelocity > 0)
         {
-            Debug.Log("Dash Used");
-            // Move sideways, no idea how this works right now
+            Debug.Log(rb.velocity.x);
+            Debug.Log(rb.velocity.y);
+            Debug.Log(GetComponent<PlayerMovement>().GetIsFacingRight());
+            if (GetComponent<PlayerMovement>().GetIsFacingRight() == true)
+            {
+                rb.velocity = new Vector2(rb.velocity.x + ability.XVelocity, rb.velocity.y);
+            }
+            else
+            {
+                rb.velocity = new Vector2(rb.velocity.x - ability.XVelocity, rb.velocity.y);
+            }
+            Debug.Log(rb.velocity.x);
+            Debug.Log(rb.velocity.y);
         }
     }
 
@@ -74,8 +86,6 @@ public class SkillList : MonoBehaviour
         // Player input check for ability usage
         CheckAbilityUsage();
 
-
-    
     }
 
     public void CheckAbilityUsage()

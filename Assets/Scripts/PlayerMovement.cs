@@ -108,6 +108,15 @@ public class PlayerMovement : MonoBehaviour
         return IsGrounded;
     }
 
+    public bool GetIsFacingRight()
+    {
+        if (isFacingRight && dirX < 0f || !isFacingRight && dirX > 0f)
+        {
+            isFacingRight = !isFacingRight;
+        }
+        return isFacingRight;
+    }
+
     private void Flip()
     {
         if (isFacingRight && dirX < 0f || !isFacingRight && dirX > 0f)
