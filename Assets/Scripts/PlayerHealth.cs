@@ -10,13 +10,18 @@ public class playerHealth : MonoBehaviour
 
     private bool takingDamage = false;
 
-    private BoxCollider2D triggerCollider;
+    public Collider2D triggerCollider;
 
-    private SpriteRenderer playerSprite;
+    public SpriteRenderer playerSprite;
+
+    [SerializeField] private Color flashingColor;
+    [SerializeField] private Color originalColor;
+    [SerializeField] private float flashDuration;
+    [SerializeField] private int nFlashes;
+
 
     void Update()
     {
-        iFrames();
         CheckDeath();
     }
 
@@ -30,31 +35,26 @@ public class playerHealth : MonoBehaviour
         }
     }
 
-    private void iFrames()
-    {
-        if (takingDamage)
-        {
-            StartCoroutine(InvincibilityFrames());
-        }
-    }
-
-    private IEnumerator InvincibilityFrames()
-    {
-        int i = 0;
-        triggerCollider.enabled = false;
-        while (i < nFlashes)
-        {
-            playerSprite.Color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            GetComponent<SpriteRenderer>().enabled = true;
-            yield return new WaitForSeconds(0.1f);
-            i++;
-        }
-    }
-
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        StartCoroutine(iFrames());
+    }
+
+    // gives player iFrames and flashes colors
+    private IEnumerator iFrames()
+    {
+        triggerCollider.enabled = false;
+        for (int i = 0; i < nFlashes; i++)
+        {
+            i++;
+            playerSprite.color = flashingColor;
+            yield return new WaitForSeconds(flashDuration);
+            playerSprite.color = originalColor;
+            yield return new WaitForSeconds(flashDuration);
+        }
+        triggerCollider.enabled = true;
+        takingDamage = false;
     }
 
     public void Heal(int health)
