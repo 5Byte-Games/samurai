@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class playerHealth : MonoBehaviour
 {
@@ -14,6 +14,8 @@ public class playerHealth : MonoBehaviour
 
     public SpriteRenderer playerSprite;
 
+    public TextMeshProUGUI healthText;
+
     [SerializeField] private Color flashingColor;
     [SerializeField] private Color originalColor;
     [SerializeField] private float flashDuration;
@@ -26,8 +28,9 @@ public class playerHealth : MonoBehaviour
     }
 
     // damage/heal handling below
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
+    private void OnCollisionStay2D(Collision2D collision)
+    {  
+        if(takingDamage) return;
         if (collision.gameObject.CompareTag("Hazard"))
         {
             takingDamage = true;
@@ -39,6 +42,8 @@ public class playerHealth : MonoBehaviour
     {
         currentHealth -= damage;
         StartCoroutine(iFrames());
+
+        healthText.text = "Health: " + currentHealth.ToString();
     }
 
     // gives player iFrames and flashes colors
